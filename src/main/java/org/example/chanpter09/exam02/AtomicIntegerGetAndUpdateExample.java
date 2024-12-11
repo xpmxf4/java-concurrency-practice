@@ -17,6 +17,7 @@ public class AtomicIntegerGetAndUpdateExample {
                     } else {
                         return balance; // 잔고 부족
                     }
+
                 });
 
                 if (updatedBalance < 0) {
