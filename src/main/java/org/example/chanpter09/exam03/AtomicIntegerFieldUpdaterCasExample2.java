@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 public class AtomicIntegerFieldUpdaterCasExample2 {
 
-    private static AtomicReferenceFieldUpdater<AtomicIntegerFieldUpdaterCasExample2, String> messageUpdater
+    private static final AtomicReferenceFieldUpdater<AtomicIntegerFieldUpdaterCasExample2, String> messageUpdater
             = AtomicReferenceFieldUpdater.newUpdater(AtomicIntegerFieldUpdaterCasExample2.class, String.class, "message");
 
     private volatile String message = "";
