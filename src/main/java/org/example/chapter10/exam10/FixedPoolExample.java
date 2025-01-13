@@ -12,7 +12,7 @@ public class FixedPoolExample {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        ExecutorService executorService = Executors.newFixedThreadPool(1);
+        ExecutorService executorService = Executors.newFixedThreadPool(NUM_OF_THREADS);
         List<Future<String>> futures = new ArrayList<>();
 
         for (int i = 0; i < NUM_OF_THREADS; i++) {
