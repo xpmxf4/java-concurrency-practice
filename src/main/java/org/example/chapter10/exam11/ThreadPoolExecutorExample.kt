@@ -1,40 +1,27 @@
 package org.example.chapter10.exam11
 
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 
 fun main() {
-    val corePoolSize = 2
-    val maxPoolSize = 4
-    val keepAliveTime = 0L
-
-    val workQueue: BlockingQueue<Runnable> = ArrayBlockingQueue(4)
-
-    val taskNum = 9
-
     val executor = ThreadPoolExecutor(
-        corePoolSize,
-        maxPoolSize,
-        keepAliveTime,
+        2, 4, 0L,
         TimeUnit.SECONDS,
-        workQueue,
-    ).apply {
-        rejectedExecutionHandler = ThreadPoolExecutor.CallerRunsPolicy()
-    }
+        ArrayBlockingQueue(4)
+    )
 
-    repeat(taskNum) { taskId ->
-        executor.execute {
-            println("${Thread.currentThread().name} 가 테스크 $taskId 를 실행하고 있습니다.")
+    try {
+        repeat(9) { taskId ->
+            try {
+                executor.execute {
+                    println("${Thread.currentThread().name} 가 task $taskId 를 실행하고 있습니다.")
+                }
+            } catch (e: RejectedExecutionException) {
+                println("Task $taskId 거부됨")
+            }
         }
-    }
-
-    executor.shutdown()
-
-    if (!executor.awaitTermination(3, TimeUnit.SECONDS)) {
-        executor.shutdownNow()
-    } else {
-        println("모든 테스크가 완료되었습니다.")
+    } finally {
+        // 예외가 발생하더라도 반드시 shutdown 실행
+        executor.shutdown()
+        executor.awaitTermination(5, TimeUnit.SECONDS)
     }
 }
